@@ -1,1 +1,1 @@
-console.log('Hello Man');
+const man = 'ahmed';

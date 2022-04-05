@@ -6,7 +6,7 @@ const port = config.port || 3000;
 console.log(config);
 
 app.get('/', (req, res) => {
-        res.send('Hello world 🌏');
+        res.send('Hello world..🌏');
 });
 
 db.connect().then((client) => {

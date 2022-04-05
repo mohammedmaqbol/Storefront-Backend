@@ -5,6 +5,6 @@ const request = supertest(app);
 describe('Test First Endpoint Server', () => {
         it('GET / Endpoint', async () => {
                 const Response = await request.get('/');
-                expect(Response.status).toBe(200)
+                expect(Response.status).toBe(200);
         });
 });

@@ -10,7 +10,8 @@
     "start": "npm run build && node dist/index.js",
     "format": "prettier --write src/**/*.ts",
     "lint": "eslint src/**/*.ts",
-    "lint-fix": "eslint src/**/*.ts --fix"
+    "lint-fix": "eslint src/**/*.ts --fix",
+    "migration-run": "db-migrate up"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
+    "db-migrate-pg": "^1.2.2",
     "dotenv": "^16.0.0",
     "eslint": "^8.12.0",
     "eslint-config-prettier": "^8.5.0",

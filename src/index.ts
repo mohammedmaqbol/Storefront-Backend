@@ -1,28 +1,21 @@
-import express from 'express';
-const app = express();
+import express, { Request, Response } from 'express';
+import bodyParser from 'body-parser';
 import config from './config';
-import db from './database';
+import routes from './routes/route';
+
+const app = express();
 const port = config.port || 3000;
-console.log(config);
 
-app.get('/', (req, res) => {
-        res.send('Hello world..🌏');
-});
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-db.connect().then((client) => {
-        return client
-                .query('SELECT NOW()')
-                .then((res) => {
-                        client.release();
-                        console.log(res.rows);
-                })
-                .catch((err) => {
-                        client.release();
-                        console.log(err.stack);
-                });
+app.get('/', (_req: Request, res: Response) => {
+  res.send('STOREFRONT-API 🟡');
 });
+app.use(routes);
+
 app.listen(port, () => {
-        console.log(`server is running on port ${port}`);
+  console.log(`Example app listening on port ${port}`);
 });
 
 export default app;

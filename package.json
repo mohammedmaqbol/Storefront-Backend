@@ -25,10 +25,14 @@
   "homepage": "https://github.com/mohammedmaqbol/Storefront-Backend#readme",
   "dependencies": {
     "@types/express": "^4.17.13",
-    "express": "^4.17.3"
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/jasmine": "^4.0.2",
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/pg": "^8.6.5",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.18.0",

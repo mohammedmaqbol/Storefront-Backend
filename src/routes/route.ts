@@ -1,16 +1,14 @@
 import express from 'express';
-import orders from '../handlers/orders';
-import * as handlers from '../handlers/users';
+import * as users_handlers from '../handlers/users';
+import * as products_handlers from '../handlers/products';
 
 const router = express.Router();
-//ORDERS ROUTES
-router.get('/orders', orders);
-router.get('/orders/:id', orders);
+//PRODUCTS ROUTES
+router.get('/products', products_handlers.Index);
 
 //USERS ROUTES
-router.get('/users', handlers.allUsers);
-router.get('/user/:id', handlers.getUser);
-router.post('/user', handlers.create);
-router.patch('/user/:id', handlers.update);
+router.get('/users', users_handlers.Index);
+router.get('/user/:id', users_handlers.Show);
+router.post('/user', users_handlers.Create);
 
 export default router;

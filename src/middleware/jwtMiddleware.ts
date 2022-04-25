@@ -2,8 +2,8 @@ import { Request } from 'express';
 import { verify, JwtPayload } from 'jsonwebtoken';
 
 export default function Authorize(req: Request, user_id: string | null = null) {
-  const authorization = req.headers.authorization;
-  const token = authorization?.split(' ')[1];
+  const authorizationHeader = req.headers.authorization;
+  const token = authorizationHeader?.split(' ')[1];
   const decoded = verify(
     token as string,
     process.env.TOKEN_SECRET as string

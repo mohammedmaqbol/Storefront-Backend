@@ -1,59 +1,61 @@
 import { Request, Response } from 'express';
 import { users } from '../models/users';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import config from '../config';
-import Authorize from '../middleware/jwtMiddleware';
+import { User } from '../types/users_types';
 
 const user = new users();
+
 //GET ALL USERS FUNCTION
 export const Index = async (req: Request, res: Response) => {
   try {
-    Authorize(req);
+    const Index = await user.Index();
+    res.json(Index);
   } catch (err) {
     res.status(401);
     return res.json(err);
   }
-  const Index = await user.Index();
-  res.json(Index);
 };
 
 //GET ONE USER FUNCTION
 export const Show = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  if (id === undefined) {
-    res.status(400);
-  }
   try {
-    Authorize(req);
+    const Show = await user.Show(id as unknown as string);
+    res.json(Show);
   } catch (err) {
     res.status(401);
     return res.json(err);
   }
-  const Show = await user.Show(id as unknown as string);
-  res.json(Show);
 };
 
 //CREATE NEW USER
 export const Create = async (req: Request, res: Response) => {
-  const { userName, firstName, lastName, password } = req.body;
+  const { id, userName, firstName, lastName, password } = req.body;
   if (
+    id === undefined ||
     userName === undefined ||
     firstName === undefined ||
     lastName === undefined ||
     password === undefined
   ) {
     res.status(400);
-    return res.send('Check First Name or Last Name or Password');
+    return res.send('chack  username, firstname, lastname, password');
   }
+  const newUser: User = { id, userName, firstName, lastName, password };
   try {
-    const Create = (await user.Create(
-      userName,
-      firstName,
-      lastName,
-      password
-    )) as User;
+    const create_user = await user.Create(newUser);
+    // eslint-disable-next-line prefer-const
+    let token = jwt.sign(
+      { user: create_user },
+      process.env.TOKEN_SECRET as string
+    );
     res.json(token);
-  } catch (err) {}
+    res.json(create_user);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 
 //Authenticate Method

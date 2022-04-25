@@ -4,7 +4,7 @@ import config from './config';
 import routes from './routes/route';
 
 const app = express();
-const port = config.port || 3000;
+const port = config.port || 5000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

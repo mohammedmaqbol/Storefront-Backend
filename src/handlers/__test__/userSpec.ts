@@ -1,49 +1,78 @@
+import { users } from '../../models/users';
+import pool from '../../database';
+import {User} from '../../types/users_types';
 
-import { User } from '../../types/users_types';
-import supertest from 'supertest';
-import app from '../../index';
-import config  from '../../config';
-import { JwtPayload, verify } from 'jsonwebtoken';
-const request = supertest(app);
+const userModel = new users();
 
+describe('User Model', () => {
+  describe('Test methods exists', () => {
+    it('should have an Get Many Users method', () => {
+      expect(userModel.Index).toBeDefined();
+    });
 
-describe("Testing Endpoint: /users", () => {
-	const user: User = { userName: 'firstTest', firstName: "test", lastName: "tester", password: "123" };
-	let token: string;
-	let userId: string;
-	it("Testing the create endpoint", async () => {
-		await request
-			.post("/user")
-			.send(user)
-			.expect(200)
-			.then((res) => {
-				token = res.body;
-				const decodedJWT = verify(token as string, config.tokenSecret as string) as JwtPayload;
-				userId = decodedJWT.user.id as string;
-			});
-	});
+    it('should have a Get One User method', () => {
+      expect(userModel.Show).toBeDefined();
+    });
 
-	it("Testing the index endpoint with valid token", async () => {
-		await request.get("/users").set("Authorization", `Bearer ${token}`).expect(200);
-	});
+    it('should have a Create User method', () => {
+      expect(userModel.Create).toBeDefined();
+    });
 
-	it("Testing the index endpoint with invalid token", async () => {
-		await request.get("/users").set("Authorization", "Bearer asdfasdf").expect(401);
-	});
+    it('should have an Authenticate User method', () => {
+      expect(userModel.authenticate).toBeDefined();
+    });
+  });
 
-	it("Testing the read endpoint with valid token and valid user ID", async () => {
-		await request.get(`/user/${userId}`).set("Authorization", `Bearer ${token}`).expect(200);
-	});
+  describe('Test User Model Logic', () => {
+    const user = {
+		userName: 'test@test.com',
+		firsName: 'Test',
+		lastName: 'User',
+		password: 'test123',
+	} as unknown as User;
 
-	it("Testing the read endpoint with valid token and invalid user ID", async () => {
-		await request.get("/user/999").set("Authorization", `Bearer ${token}`).expect(404);
-	});
+    beforeAll(async () => {
+      const createdUser = await userModel.Create(user);
+      user.id = createdUser.id;
+	  console.log(user.id, 123213);
+	  
+    });
 
-	it("Testing Token and invalid user ID", async () => {
-		await request.get("/user/999").set("Authorization", "Bearer heyIamafaketoken").expect(401);
-	});
+    afterAll(async () => {
+      const connection = await pool.connect();
 
-	it("Testing the delete endpoint with valid token and valid user ID", async () => {
-		await request.delete("/user").set("Authorization", `Bearer ${token}`).send({ id: userId }).expect(200);
-	});
+      const sql = 'DELETE FROM users \nALTER SEQUENCE users_id_seq RESTART WITH 1;';
+      await connection.query(sql);
+      connection.release();
+    });
+
+    it('Create method should return a New User', async () => {
+      const createdUser = await userModel.Create({
+			  user_name: 'test2User',
+			  firsName: 'Test',
+			  lastName: 'User',
+			  password: 'test123',
+		  } as unknown as User);
+      expect(createdUser).toEqual({
+			  id: createdUser.id,
+			  userName: 'test2@test.com',
+			  firsName: 'Test',
+			  lastName: 'User',
+		  } as unknown as User);
+    });
+
+    it('Get Many method should return All available users in DB', async () => {
+      const users = await userModel.Index();
+      expect(users.length).toBe(2);
+    });
+
+    it('Get One method should return testUser when called with ID', async () => {
+      const returnedUser = await userModel.Show(user.id as unknown as number);
+      expect(returnedUser.id).toBe(user.id);
+      expect(returnedUser.userName).toBe(user.userName);
+      expect(returnedUser.firstName).toBe(user.firstName);
+      expect(returnedUser.lastName).toBe(user.lastName);
+    
+    });
+  });
 });

@@ -55,17 +55,28 @@ export class users {
   }
   //AUTHENTICATE
   async authenticate(userName: string, password: string): Promise<User | null> {
-		const connection = await pool.connect();
-		const query = `SELECT password FROM users WHERE userName = $1`;
-		const result = await connection.query(query, [userName]);
-
-		if (result.rows.length) {
-			const user = result.rows[0];
-			if (bcrypt.compareSync(password + pepper, user.password)) {
-				connection.release();
-				return user;
-			}
-		}
-		throw new Error('Invalid username or Password');
-	}
+    try {
+      const connection = await pool.connect();
+      const query = 'SELECT password FROM users WHERE userName=$1';
+      const result = await connection.query(query, [userName]);
+      if (result.rows.length) {
+        const { password: hashPassword } = result.rows[0];
+        const isPasswordValid = bcrypt.compareSync(
+          `${password}${config.pepper}`,
+          hashPassword
+        );
+        if (isPasswordValid) {
+          const userInfo = await connection.query(
+            'SELECT id, userName, userName, firstName, lastName FROM users WHERE userName=($1)',
+            [userName]
+          );
+          return userInfo.rows[0];
+        }
+      }
+      connection.release();
+      return null;
+    } catch (error) {
+      throw new Error(`Unable to login: ${(error as Error).message}`);
+    }
+  }
 }

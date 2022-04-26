@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { users } from '../models/users';
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import config from '../config';
 import { User } from '../types/users_types';
 
 const user = new users();
 
 //GET ALL USERS FUNCTION
-export const Index = async (req: Request, res: Response) => {
+export const Index = async (_req: Request, res: Response) => {
   try {
     const Index = await user.Index();
     res.json(Index);
@@ -21,7 +21,7 @@ export const Index = async (req: Request, res: Response) => {
 export const Show = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   try {
-    const Show = await user.Show(id as unknown as string);
+    const Show = await user.Show(id);
     res.json(Show);
   } catch (err) {
     res.status(401);
@@ -31,49 +31,46 @@ export const Show = async (req: Request, res: Response) => {
 
 //CREATE NEW USER
 export const Create = async (req: Request, res: Response) => {
-  const { id, userName, firstName, lastName, password } = req.body;
-  if (
-    id === undefined ||
-    userName === undefined ||
-    firstName === undefined ||
-    lastName === undefined ||
-    password === undefined
-  ) {
-    res.status(400);
-    return res.send('chack  username, firstname, lastname, password');
-  }
-  const newUser: User = { id, userName, firstName, lastName, password };
+  //const {userName, firstName, lastName, password } = req.body;
+  //const newUser: User = {userName, firstName, lastName, password };
+  const newUser: User = {
+		userName: req.body.userName,
+		firstName: req.body.firstName,
+		lastName: req.body.lastName,
+		password: req.body.password
+	};
+  
   try {
     const create_user = await user.Create(newUser);
-    // eslint-disable-next-line prefer-const
-    let token = jwt.sign(
-      { user: create_user },
-      process.env.TOKEN_SECRET as string
-    );
-    res.json(token);
-    res.json(create_user);
+    console.log({...create_user});
+    
+    let token = jwt.sign( { newUser: create_user } as unknown as string, config.tokenSecret as string);
+    res.json({...create_user, token : token});
   } catch (err) {
-    res.status(400);
-    res.json(err);
+    res.status(400).json(user);
+    
   }
 };
 
 //Authenticate Method
 export const authenticate = async (req: Request, res: Response) => {
-  try {
-    const { userName, password } = req.body;
-    const auth_user = await user.authenticate(userName, password);
-    const token = jwt.sign({ user }, config.tokenSecret as string);
-    if (!auth_user) {
-      return res.status(401).json({
-        status: 'error',
-        message: 'User Name or Password Is Felid',
-      });
-    }
-    return res.json({
-      data: { ...auth_user, token },
-    });
-  } catch (err) {
-    res.status(400).json({ message: 'wrong' });
+  
+  try{
+        const { userName, password } = req.body;
+        const users = await user.authenticate(userName, password);
+        const token = jwt.sign({ users }, config.tokenSecret as unknown as string);
+        if (!users) {
+          return res.status(401).json({
+            status: 'error',
+            message: 'the username and password do not match please try again',
+          });
+        }
+          return res.json({
+            status: 'success',
+            data: { ...users, token },
+            message: 'user authenticated successfully',
+          });
+  }catch (err) {
+    throw err;
   }
 };

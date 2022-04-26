@@ -17,4 +17,8 @@ module.exports = {
         rules: {
           'prettier/prettier': 1,
         },
-};
+        settings : {
+          "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx"]
+        }
+},

@@ -1,7 +1,7 @@
 import pool from '../database';
 import { Product } from '../types/product_types';
 
-export class products {
+export class Products {
   // SHOW ALL PRODUCTS
   async Index(): Promise<Product[]> {
     try {
@@ -15,7 +15,7 @@ export class products {
     }
   }
   //GET PRODUCTS BY ID
-  async Show(id: string): Promise<Product> {
+  async Show(id: number): Promise<Product> {
     try {
       const connection = await pool.connect();
       const query = 'SELECT id, name, price FROM products WHERE id=($1)';
@@ -30,8 +30,8 @@ export class products {
   async Create(p: Product) {
     try {
       const connection = await pool.connect();
-      const query = `INSERT INTO users(id, name, price) VALUES ($1, $2, $3) RETURNING *`;
-      const results = await connection.query(query, [p.id, p.name, p.price]);
+      const query = `INSERT INTO products(name, price) VALUES ($1, $2) RETURNING *`;
+      const results = await connection.query(query, [p.name, p.price]);
       connection.release();
       return results.rows[0];
     } catch (err) {

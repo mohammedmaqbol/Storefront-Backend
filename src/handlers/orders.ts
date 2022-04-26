@@ -1,13 +1,11 @@
 import { Request, Response } from 'express';
 import { orderUser } from '../models/order';
-import * as jwt from 'jsonwebtoken';
-import config from '../config';
 import Authorize from '../middleware/jwtMiddleware';
 import { order } from '../types/orders_types';
 
-const order = new orderUser();
+const Order = new orderUser();
 // CREATE FUNCTION
-const Create = async (req: Request, res: Response) => {
+export const Create = async (req: Request, res: Response) => {
   const { user_id, status } = req.body;
   const order: order = { user_id, status };
   try {
@@ -19,80 +17,59 @@ const Create = async (req: Request, res: Response) => {
   }
 
   try {
-    const newOrder = await order.Index(order);
+    const newOrder = await Order.Create(order);
     res.json(newOrder);
   } catch (err) {
     res.json(err);
   }
 };
 
-// create the index route
-const index = async (req: Request, res: Response) => {
+// SHOW ALL FUNCTION
+export const Index = async (req: Request, res: Response) => {
   try {
-    const authorizationHeader = req.headers.authorization as string;
-    const token = authorizationHeader.split(' ')[1];
-    jwt.verify(token, secretToken as unknown as string);
-  } catch (err) {
-    res.status(401);
-    res.json(`Access denied, invalid token`);
-    return;
-  }
-
-  try {
-    const allOrders = await order.index();
+    const allOrders = await Order.Index();
     res.json(allOrders);
   } catch (err) {
     res.json(err);
   }
 };
 
-// create the show route
-const show = async (req: Request, res: Response) => {
-  const o: Order = {
-    id: req.params.id as unknown as number,
-    status: req.body.status,
-    userId: req.body.userId,
-  };
-
-  try {
-    const authorizationHeader = req.headers.authorization as string;
-    const token = authorizationHeader.split(' ')[1];
-    jwt.verify(token, secretToken as unknown as string);
-  } catch (err) {
-    res.status(401);
-    res.json(`Access denied, invalid token`);
-    return;
+//SHOW ONE FUNCTION
+export const Show = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const order = await Order.Show(id);
+  if (order === undefined) {
+    res.status(404);
+    return res.json('The order is not found');
   }
-
-  try {
-    const specificOrder = await order.show(o.id, o.userId);
-    res.json(specificOrder);
-  } catch (err) {
-    res.json(err);
-  }
+  res.json(order);
 };
 
 // create the add products to order route
-const addProduct = async (req: Request, res: Response) => {
+export const addProduct = async (req: Request, res: Response) => {
   const quantity: number = parseInt(req.body.quantity);
   const orderId: string = req.params.id;
   const productId: string = req.body.productId;
-
   try {
-    const authorizationHeader = req.headers.authorization as string;
-    const token = authorizationHeader.split(' ')[1];
-    jwt.verify(token, secretToken as unknown as string);
+    Authorize(req);
   } catch (err) {
     res.status(401);
-    res.json(`Access denied, invalid token`);
+    res.json('Access denied, invalid token');
     return;
   }
-
-  try {
-    const addedProducts = await order.addProduct(quantity, orderId, productId);
-    res.json(addedProducts);
+  /*try {
+    const addProduct = await Order.addProduct(quantity, orderId, productId);
+    res.json(addProduct);
   } catch (err) {
     res.status(400);
     res.json(err);
   }
+
+  try {
+    const addedProducts = await Order.addProduct(quantity, orderId, productId);
+    res.json(addedProducts);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }*/
 };

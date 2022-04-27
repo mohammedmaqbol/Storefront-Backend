@@ -33,12 +33,12 @@ export class orderUser {
   async Show(id: number): Promise<order> {
     try {
       const connection = await pool.connect();
-      const sql = 'SELECT * FROM orders WHERE id=($1) AND user_id=($2)';
+      const sql = 'SELECT * FROM orders WHERE id=($1)';
       const result = await connection.query(sql, [id]);
       connection.release();
       return result.rows[0];
     } catch (err) {
-      throw new Error(`can not get this user's order ${err}`);
+      throw new Error(`can not get this order ${err}`);
     }
   }
 

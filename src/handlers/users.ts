@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { users } from '../models/users';
-import jwt from 'jsonwebtoken';
+import { usersModel } from '../models/users';
+import { sign } from "jsonwebtoken";
 import config from '../config';
 import { User } from '../types/users_types';
 
-const user = new users();
+const user = new usersModel();
 
 //GET ALL USERS FUNCTION
 export const Index = async (_req: Request, res: Response) => {
@@ -31,20 +31,15 @@ export const Show = async (req: Request, res: Response) => {
 
 //CREATE NEW USER
 export const Create = async (req: Request, res: Response) => {
-  //const {userName, firstName, lastName, password } = req.body;
-  //const newUser: User = {userName, firstName, lastName, password };
   const newUser: User = {
-		userName: req.body.userName,
-		firstName: req.body.firstName,
-		lastName: req.body.lastName,
+		firstname: req.body.firstname,
+		lastname: req.body.lastname,
 		password: req.body.password
 	};
   
   try {
     const create_user = await user.Create(newUser);
-    console.log({...create_user});
-    
-    let token = jwt.sign( { newUser: create_user } as unknown as string, config.tokenSecret as string);
+    let token = sign( { newUser: create_user } as unknown as string, config.tokenSecret as string);
     res.json({...create_user, token : token});
   } catch (err) {
     res.status(400).json(user);
@@ -56,8 +51,8 @@ export const Create = async (req: Request, res: Response) => {
 export const authenticate = async (req: Request, res: Response) => {
   
   try{
-        const { userName, password } = req.body;
-        const users = await user.authenticate(userName, password);
+        const { id, password } = req.body;
+        const users = await user.authenticate(id, password);
         const token = jwt.sign({ users }, config.tokenSecret as unknown as string);
         if (!users) {
           return res.status(401).json({

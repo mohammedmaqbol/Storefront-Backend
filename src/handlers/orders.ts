@@ -24,16 +24,6 @@ export const Create = async (req: Request, res: Response) => {
   }
 };
 
-// SHOW ALL FUNCTION
-export const Index = async (req: Request, res: Response) => {
-  try {
-    const allOrders = await Order.Index();
-    res.json(allOrders);
-  } catch (err) {
-    res.json(err);
-  }
-};
-
 //SHOW ONE FUNCTION
 export const Show = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
@@ -57,19 +47,19 @@ export const addProduct = async (req: Request, res: Response) => {
     res.json('Access denied, invalid token');
     return;
   }
-  /*try {
-    const addProduct = await Order.addProduct(quantity, orderId, productId);
-    res.json(addProduct);
-  } catch (err) {
-    res.status(400);
-    res.json(err);
-  }
-
   try {
-    const addedProducts = await Order.addProduct(quantity, orderId, productId);
-    res.json(addedProducts);
-  } catch (err) {
-    res.status(400);
-    res.json(err);
-  }*/
+      const addProduct = await Order.addProduct(quantity, orderId, productId);
+      res.json(addProduct);
+    } catch (err) {
+      res.status(400);
+      res.json(err);
+    }
+
+    try {
+      const addedProducts = await Order.addProduct(quantity, orderId, productId);
+      res.json(addedProducts);
+    } catch (err) {
+      res.status(400);
+      res.json(err);
+    }
 };

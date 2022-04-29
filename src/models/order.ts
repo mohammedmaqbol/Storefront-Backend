@@ -15,20 +15,6 @@ export class orderUser {
       throw new Error(`Can not create this order ${err}`);
     }
   }
-
-  //  SHOW ALL ORDERS
-  async Index(): Promise<order[]> {
-    try {
-      const connection = await pool.connect();
-      const sql = 'SELECT * FROM orders';
-      const result = await connection.query(sql);
-      connection.release();
-      return result.rows;
-    } catch (err) {
-      throw new Error(`can not show orders ${err}`);
-    }
-  }
-
   // GET ORDER BY ID
   async Show(id: number): Promise<order> {
     try {
@@ -43,15 +29,11 @@ export class orderUser {
   }
 
   // Add PRODUCTS INTO ORDER
-  async addProduct(o : order) : Promise<order> {
+  async addProduct(quantity: number, orderId: string, productId: string) : Promise<order> {
     try {
       const connection = await pool.connect();
-      const sql =
-        'INSERT INTO order (status, user_id) VALUES ($1,$2) RETURNING *';
-      const result = await connection.query(sql, [
-        o.status,
-        o.user_id,
-      ]);
+      const sql = "INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *";
+			const result = await connection.query(sql, [quantity, orderId, productId]);
       connection.release();
       return result.rows[0];
     } catch (err) {

@@ -37,10 +37,5 @@ describe("Testing Model: product", () => {
 		const foundProducts = await productStore.Show(product.id as number);
 		expect(foundProducts).toEqual(product);
 	});
-          afterAll(async () => {  
-                    const connection = await pool.connect();
-                    const sql = 'DELETE FROM products;';
-                    await connection.query(sql);
-                    connection.release();
-          });
+
 });

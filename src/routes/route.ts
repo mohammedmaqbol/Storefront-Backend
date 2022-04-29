@@ -6,7 +6,6 @@ import * as orders_handlers from '../handlers/orders';
 const router = express.Router();
 
 //ORDER ROUTES
-router.get('/orders', orders_handlers.Index);
 router.get('/order/:id', orders_handlers.Show);
 router.post('/order', orders_handlers.Create);
 router.post('/orders/:id/products', orders_handlers.addProduct);

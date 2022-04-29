@@ -32,7 +32,7 @@ export const Show = async (req: Request, res: Response) => {
 };
 
 //CREATE NEW USER
-const Create = async (req: Request, res: Response) => {
+export const Create = async (req: Request, res: Response) => {
 	const { firstname, lastname, password } = req.body;
 	if (firstname === undefined || lastname === undefined || password === undefined) {
 		res.status(400);
@@ -41,7 +41,7 @@ const Create = async (req: Request, res: Response) => {
 	const new_user: User = { firstname, lastname, password };
 	try {
 		const newUser = await user.Create(new_user);
-		var token = sign({ user: { id: newUser.id, firstname, lastname } }, process.env.TOKEN_SECRET as string);
+		var token = sign({ user: { id: newUser.id, firstname, lastname } }, config.tokenSecret as string);
 		res.json(token);
 	} catch (err) {
 		res.status(400);
@@ -59,7 +59,7 @@ export const authenticate = async (req: Request, res: Response) => {
 	const user_base: User = { firstname, lastname, password };
 	try {
 		const u = await user.authenticate(user_base.firstname, user_base.lastname, user_base.password);
-    if (u === null) {
+    		if (u === null) {
 			res.status(401);
 			res.json("Incorrect user information");
 		} else {

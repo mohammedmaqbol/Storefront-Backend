@@ -1,4 +1,4 @@
-import { usersModel, hashPassword } from '../users';
+import { usersModel } from '../users';
 import {User} from '../../types/users_types';
 import pool from '../../database';
 
@@ -32,10 +32,4 @@ describe("Testing Model: user", () => {
 	it("Must have a show method", () => {
 		expect(userStore.Show).toBeDefined();
 	});
-          afterAll(async () => {  
-                    const connection = await pool.connect();
-                    const sql = 'DELETE FROM users;';
-                    await connection.query(sql);
-                    connection.release();
-          });
 });

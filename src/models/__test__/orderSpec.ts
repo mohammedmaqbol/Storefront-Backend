@@ -5,7 +5,7 @@ import {order} from '../../types/orders_types';
 
 const orderStore = new orderUser();
 const userStore = new usersModel();
-const orderBase: order = { status: "active", user_id:'' as unknown as number};
+const orderBase: order = { status: "active", user_id:'' as unknown as string};
 let order: order;
 
 describe("Testing Model: order", () => {
@@ -25,15 +25,6 @@ describe("Testing Model: order", () => {
 		});
 	});
 
-	it("Must have an index method", () => {
-		expect(orderStore.Index).toBeDefined();
-	});
-
-	it("Testing the index model to include the order", async () => {
-		const orders = await orderStore.Index();
-		expect(orders).toContain(order);
-	});
-
 	it("Must have a show method", () => {
 		expect(orderStore.Show).toBeDefined();
 	});
@@ -42,10 +33,5 @@ describe("Testing Model: order", () => {
 		const foundOrder = await orderStore.Show(order.id as number);
 		expect(foundOrder).toEqual({ id: order.id, status: order.status, user_id: order.user_id });
 	});
-	afterAll(async () => {  
-                    const connection = await pool.connect();
-                    const sql = 'DELETE FROM orders;';
-                    await connection.query(sql);
-                    connection.release();
-    });
+	
 });

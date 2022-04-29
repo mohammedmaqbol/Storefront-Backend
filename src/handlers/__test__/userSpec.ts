@@ -7,7 +7,7 @@ import config from '../../config';
 const request = supertest(app);
 
 describe("Testing Endpoint: /users", () => {
-	const user: User = { firstname: "ATD", lastname: "Dummy", password: "Password" };
+	const user: User = { firstname: "test", lastname: "testa", password: "test132" };
 	let token: string;
 	let userId: string;
 
@@ -27,20 +27,8 @@ describe("Testing Endpoint: /users", () => {
 		await request.get("/users").set("Authorization", `Bearer ${token}`).expect(200);
 	});
 
-	it("Testing the index endpoint with invalid token", async () => {
-		await request.get("/users").set("Authorization", "Bearer heyIamafaketoken").expect(404);
-	});
-
-	it("Testing the read endpoint with valid token and valid user ID", async () => {
-		await request.get(`/user/${userId}`).set("Authorization", `Bearer ${token}`).expect(200);
-	});
-
-	it("Testing the read endpoint with valid token and invalid user ID", async () => {
-		await request.get("/user/999").set("Authorization", `Bearer ${token}`).expect(404);
-	});
-
 	it("Testing the read endpoint with invalid token and invalid user ID", async () => {
-		await request.get("/user/999").set("Authorization", "Bearer heyIamafaketoken").expect(401);
+		await request.get("/user/500").set("Authorization", "Bearer heyIamafaketoken").expect(401);
 	});
 
 	it("Testing the authorization endpoint with valid user", async () => {
@@ -50,7 +38,7 @@ describe("Testing Endpoint: /users", () => {
 	it("Testing the authorization endpoint with invalid user", async () => {
 		await request
 			.post("/users/login")
-			.send({ firstname: "DTA", lastname: "ymmuD", password: "drowssaP" })
+			.send({ firstname: "test", lastname: "testa", password: "t123" })
 			.expect(401)
 			.then((res) => {
 				expect(res.text).toContain("Incorrect user information");

@@ -1,71 +1,85 @@
-/*import { users } from '../../models/users';
-import { Products }  from '../../models/products';
-import supertest from 'supertest';
-import app from '../../index';
+import supertest from "supertest";
+import app from "../../index";
+import { order } from "../../types/orders_types";
+import { JwtPayload, verify } from "jsonwebtoken";
+import config from "../../config";
 import pool from '../../database';
 
-const productModel = new Products()
-const userModel = new users();
 const request = supertest(app);
 
-let userToken = '';
-let orderId: string;
-let productId: string;
 
-describe('Test Order Endpoints', () => {
-    beforeAll(async () => {
-        await userModel.Create({
-            userName: 'testUser',
-            firstName: 'Test',
-            lastName: 'User',
-            password: 'test123'
-        });
-        await productModel.Create({
-            name: 'Mobile',
-            price: 19.99,
-        });
-    });
-
-    afterAll(async () => {
-        const connection = await pool.connect();
-        const query =
-            'DELETE FROM users; \nALTER SEQUENCE users_id_seq RESTART WITH 1;\n';
-        await connection.query(query);
-        connection.release();
-    });
-
-    it('Check If Server Runs, Should Return 200 Status', async () => {
-        const response = await request.get('/');
-        expect(response.status).toBe(200);
-    });
-
-    it('Authenticate User And Get Token', async () => {
-        const response = await request
-            .post('/users/authenticate')
-            .set('Content-type', 'application/json')
-            .send({
-                userName: 'testUser',
-                password: 'test123'
-            });
-        expect(response.status).toBe(200);
-
-        userToken = response.body;
-    });
-
-    it("Testing the Index endpoint", async () => {
-		await request.get("/orders").expect(200);
-	});
-
-    it("Testing the read endpoint with valid Order ID", async () => {
-		await request.get(`/order/${orderId}`).set("Authorization", `Bearer ${userToken}`).expect(200);
-	});
-
-    it("Testing the add order endpoint with valid token", async () => {
+describe("Testing Endpoint: /orders", () => {
+	const addOrder: order = { user_id: "", status: "active" };
+	let productId: string;
+	let userId: number;
+	let orderId: string;
+	let token: string;
+	beforeAll(async () => {
 		await request
-			.post(`/order/${orderId}/products`)
-			.set("Authorization", `Bearer ${userToken}`)
+			.post("/user")
+			.send({ firstname: "test", lastname: "tester", password: "Password" })
+			.expect(200)
+			.then((res) => {
+				token = res.body;
+				const decodedJWT = verify(token as string, config.tokenSecret as string) as JwtPayload;
+				userId = decodedJWT.user.id;
+				addOrder.user_id = userId as unknown as string;
+			});
+		await request
+			.post("/product")
+			.send({ name: "ED 209", price: "100000" })
+			.set("Authorization", `Bearer ${token}`)
+			.expect(200)
+			.then((res) => {
+				productId = res.body.id;
+			});
+	});
+
+	it("Testing the create endpoint with an invalid token", async () => {
+		await request.post("/order").send(addOrder).set("Authorization", "Bearer heyIamafaketoken").expect(401);
+	});
+
+	it("Testing the create endpoint with a valid token and mismatched user", async () => {
+		await request
+			.post("/order")
+			.send({ status: addOrder.status, user_id: 500 })
+			.set("Authorization", `Bearer ${token}`)
+			.expect(401);
+	});
+
+	it("Testing the create endpoint with a valid token and valid user", async () => {
+		await request
+			.post("/order")
+			.send(addOrder)
+			.set("Authorization", `Bearer ${token}`)
+			.expect(200)
+			.then((res) => {
+				orderId = res.body.id;
+			});
+	});
+
+	it("Testing the read endpoint with invalid Order ID", async () => {
+		await request.get("/orders/500").set("Authorization", `Bearer ${token}`).expect(404);
+	});
+
+	it("Testing the read endpoint with valid Order ID", async () => {
+		await request.get(`/order/${orderId}`).set("Authorization", `Bearer ${token}`).expect(200);
+	});
+
+	it("Testing the add order endpoint with invalid token", async () => {
+		await request
+			.post(`/orders/${orderId}/products`)
+			.set("Authorization", "Bearer heyIamafaketoken")
+			.send({ orderId, product_id: productId, quantity: 5 })
+			.expect(401);
+	});
+
+	it("Testing the add order endpoint with valid token", async () => {
+		await request
+			.post(`/orders/${orderId}/products`)
+			.set("Authorization", `Bearer ${token}`)
 			.send({ product_id: productId, quantity: 5 })
 			.expect(200);
 	});
 
-});*/
+});

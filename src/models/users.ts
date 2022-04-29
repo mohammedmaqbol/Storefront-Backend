@@ -6,11 +6,6 @@ import bcrypt from 'bcrypt';
 const pepper = config.password;
 const salt_rounds = config.password;
 
-export const hashPassword = (password: string) => {
-  const salt = parseInt(config.salt as string, 10);
-  return bcrypt.hashSync(`${password}${config.pepper}`, salt);
-};
-// 
 export class usersModel {
   [x: string]: any;
   // SHOW ALL USERS

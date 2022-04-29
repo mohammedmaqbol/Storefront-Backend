@@ -47,5 +47,5 @@ describe("Testing Model: order", () => {
                     const sql = 'DELETE FROM orders;';
                     await connection.query(sql);
                     connection.release();
-          });
+    });
 });

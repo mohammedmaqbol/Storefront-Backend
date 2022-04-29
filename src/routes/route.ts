@@ -20,6 +20,6 @@ router.post('/product', products_handlers.Create);
 router.get('/users', users_handlers.Index);
 router.get('/user/:id', users_handlers.Show);
 router.post('/user', users_handlers.Create);
-router.post('/users/authenticate', users_handlers.authenticate);
+router.post('/users/login', users_handlers.authenticate);
 
 export default router;

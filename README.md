@@ -9,8 +9,8 @@
 * [Database setup](#Database-setup)
 * [Prerequisites](#Prerequisites)
 * [Instructions](#Instructions)
-* 
-*
+* [Endpoints](#Endpoints)
+* [Database-Schema](#Database-Schema)
 # Dependencies:
     - express - Node.js web app framework
     - dotenv - Load environment variables

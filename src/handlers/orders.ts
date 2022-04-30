@@ -4,6 +4,7 @@ import Authorize from '../middleware/jwtMiddleware';
 import { order } from '../types/orders_types';
 
 const Order = new orderUser();
+
 // CREATE FUNCTION
 export const Create = async (req: Request, res: Response) => {
   const { user_id, status } = req.body;
@@ -27,11 +28,16 @@ export const Create = async (req: Request, res: Response) => {
 //SHOW ONE FUNCTION
 export const Show = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  const order = await Order.Show(id);
-  if (order === undefined) {
+  if (id === undefined) {
     res.status(404);
     return res.json('The order is not found');
   }
+  const order = await Order.Show(id);
+  if(order === undefined){
+    res.status(404);
+		return res.json("Order not found");
+  }
+  
   res.json(order);
 };
 

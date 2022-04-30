@@ -3,7 +3,7 @@ import app from "../../index";
 import { order } from "../../types/orders_types";
 import { JwtPayload, verify } from "jsonwebtoken";
 import config from "../../config";
-import pool from '../../database';
+
 
 const request = supertest(app);
 
@@ -46,6 +46,7 @@ describe("Testing Endpoint: /orders", () => {
 			.set("Authorization", `Bearer ${token}`)
 			.expect(401);
 	});
+	
 
 	it("Testing the create endpoint with a valid token and valid user", async () => {
 		await request
@@ -57,6 +58,7 @@ describe("Testing Endpoint: /orders", () => {
 				orderId = res.body.id;
 			});
 	});
+
 
 	it("Testing the read endpoint with invalid Order ID", async () => {
 		await request.get("/orders/500").set("Authorization", `Bearer ${token}`).expect(404);

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run build && jasmine",
+    "test": "export NODE_ENV=test&& db-migrate up && tsc && jasmine && db-migrate reset",
+    "test:windows": "set NODE_ENV=test&& db-migrate up && tsc && jasmine && db-migrate reset",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "start": "npm run build && node dist/index.js",

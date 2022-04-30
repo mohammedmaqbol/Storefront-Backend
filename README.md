@@ -57,10 +57,8 @@
 ### 1. Install Dependencies
     After Cloning the project, head inside the project folder and run
     ```
-git status
-git add
-git commit
-```
+      npm install
+    ```
    
 
 ### 2.  DB Creation and Migrations

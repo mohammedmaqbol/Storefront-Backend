@@ -28,16 +28,13 @@ export const Create = async (req: Request, res: Response) => {
 //SHOW ONE FUNCTION
 export const Show = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  if (id === undefined) {
-    res.status(404);
-    return res.json('The order is not found');
+  if (!id) {
+    return res.status(404), res.json('The order is not found');
   }
   const order = await Order.Show(id);
-  if(order === undefined){
-    res.status(404);
-		return res.json("Order not found");
+  if(!order){
+    return res.status(404), res.json("Order not found");
   }
-  
   res.json(order);
 };
 
@@ -45,7 +42,11 @@ export const Show = async (req: Request, res: Response) => {
 export const addProduct = async (req: Request, res: Response) => {
   const quantity: number = parseInt(req.body.quantity);
   const orderId: string = req.params.id;
-  const productId: string = req.body.productId;
+  const productId: string = req.body.product_id;
+  if (!orderId || !productId || !quantity) {
+		res.status(400);
+		return res.send("Missing/Invalid parameters, the following parameter are required: orderId, productId, quantity");
+	}
   try {
     Authorize(req);
   } catch (err) {
@@ -56,14 +57,6 @@ export const addProduct = async (req: Request, res: Response) => {
   try {
       const addProduct = await Order.addProduct(quantity, orderId, productId);
       res.json(addProduct);
-    } catch (err) {
-      res.status(400);
-      res.json(err);
-    }
-
-    try {
-      const addedProducts = await Order.addProduct(quantity, orderId, productId);
-      res.json(addedProducts);
     } catch (err) {
       res.status(400);
       res.json(err);

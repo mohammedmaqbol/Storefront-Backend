@@ -65,9 +65,8 @@ npm run migration-run
 ### 3. Starting the project
     Make sure to have Port 5000 available for Express server and port 5423 for PostgreSQL server 
 ```
-    npm run  start
+npm run  start
 ```
-
 ### 4. Running the tests
 ```
     npm run test

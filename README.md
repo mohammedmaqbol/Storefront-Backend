@@ -55,11 +55,12 @@
 # Instructions
 
 ### 1. Install Dependencies
-    After Cloning the project, head inside the project folder and run
-     ```
-        function test() {
-          console.log("notice the blank line before this function?");
-        }
+```
+function test() {
+  console.log("notice the blank line before this function?");
+}
+```
+
         ```
 
    

@@ -56,7 +56,12 @@
 
 ### 1. Install Dependencies
     After Cloning the project, head inside the project folder and run
-     Use `npm install`
+     ```
+        function test() {
+          console.log("notice the blank line before this function?");
+        }
+        ```
+
    
 
 ### 2.  DB Creation and Migrations

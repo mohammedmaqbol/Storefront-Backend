@@ -3,9 +3,9 @@
 ## Table of Contents
 
 * [Dependencies](#Dependencies)
-* [Dev Dependencies](#Dev Dependencies)
-* [.env file contents](#.env file contents)
-* [Dev Dependencies](#Dev Dependencies)
+* [Dev Dependencies](#DevDependencies)
+* [.env file contents](#.envfile contents)
+* [Dev Dependencies](#DevDependencies)
 * [Database setup](#Database setup)
 * [Prerequisites](#Prerequisites)
 * [Instructions](#Instructions)

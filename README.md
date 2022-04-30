@@ -20,7 +20,7 @@
     - db-migrate - Database migration tool
     - db-migrate-pg - PostgreSQL driver for DB
 
-## Dev Dependencies:
+# Dev Dependencies:
     - eslint -  Linter
     - prettier -  Code formatting
     - eslint-plugin-prettier -  Run prettier as an eslint rule
@@ -52,35 +52,25 @@
  - User: postgres
  - Password: admin
 
-
-
-# Prerequisites
-Your machine must have the following installed on it:
-- [Node/NPM](https://nodejs.org/en/download/) (v14 or higher)
-
-## Instructions
+# Instructions
 
 ### 1. Install Dependencies
-After Cloning the project, head inside the project folder and run
-```
-npm install
-```
+    After Cloning the project, head inside the project folder and run
+    ```
+    npm install
+    ```
 
 ### 2.  DB Creation and Migrations
-``` 
-npm run migration-run
-```
+    ``` 
+    npm run migration-run
+    ```
 ### 3. Starting the project
-Make sure to have Port 5000 available for Express server and port 5423 for PostgreSQL server 
-```
-npm start
-```
+    Make sure to have Port 5000 available for Express server and port 5423 for PostgreSQL server 
+    ```
+    npm start
+    ```
 
 ### 4. Running the tests
-```
-npm run test
-```
-
-Any by now you should be able to go to `localhost:5000` to test that everything is working as expected.
-
-
+    ```
+    npm run test
+    ```

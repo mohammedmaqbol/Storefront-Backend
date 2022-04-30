@@ -71,3 +71,8 @@ npm run  start
 ```
     npm run test
 ```
+# Endpoints
+ - See REQUIREMENTS.md file
+
+# Database Schema
+ - See REQUIREMENTS.md file

@@ -56,25 +56,19 @@
 
 ### 1. Install Dependencies
 ```
-function test() {
-  console.log("notice the blank line before this function?");
-}
+npm install
 ```
-
-
-   
-
 ### 2.  DB Creation and Migrations
-    ``` 
-    npm run migration-run
-    ```
+``` 
+npm run migration-run
+```
 ### 3. Starting the project
     Make sure to have Port 5000 available for Express server and port 5423 for PostgreSQL server 
-    ```
-    npm start
-    ```
+```
+    npm run  start
+```
 
 ### 4. Running the tests
-    ```
+```
     npm run test
-    ```
+```

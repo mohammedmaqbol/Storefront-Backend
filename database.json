@@ -10,6 +10,7 @@
       "password": { "ENV": "POSTGRES_PASSWORD" }
     },
     "test": {
+      
       "driver": "pg",
       "host": { "ENV": "POSTGRES_HOST" },
       "port": { "ENV": "POSTGRES_PORT" },

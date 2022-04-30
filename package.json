@@ -7,7 +7,7 @@
     "test": "export NODE_ENV=test&& db-migrate up && tsc && jasmine && db-migrate reset",
     "test:windows": "set NODE_ENV=test&& db-migrate up && tsc && jasmine && db-migrate reset",
     "dev": "nodemon src/index.ts",
-    "build": "tsc",
+    "build": "tsc",  
     "start": "npm run build && node dist/index.js",
     "format": "prettier --write src/**/*.ts",
     "lint": "eslint src/**/*.ts",

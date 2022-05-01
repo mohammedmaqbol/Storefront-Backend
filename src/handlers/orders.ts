@@ -9,6 +9,7 @@ const Order = new orderUser();
 export const Create = async (req: Request, res: Response) => {
   const { user_id, status } = req.body;
   const order: order = { user_id, status };
+  
   try {
     Authorize(req, user_id);
   } catch (err) {

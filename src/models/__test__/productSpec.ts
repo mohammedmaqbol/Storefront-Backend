@@ -1,5 +1,4 @@
 import {Products} from '../products';
-import pool from '../../database';
 import {Product} from '../../types/product_types';
 
 const productStore = new Products();

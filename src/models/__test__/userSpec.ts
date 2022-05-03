@@ -1,6 +1,6 @@
 import { usersModel } from '../users';
 import {User} from '../../types/users_types';
-import pool from '../../database';
+
 
 const userStore = new usersModel();
 const userBase: User = {firstname: "R2", lastname: "D2", password : '123'};

@@ -98,20 +98,12 @@ npm run  start
 - id - serial primary key 
 - name - varchar - Cannot be null
 - price - numeric(17,2) - Cannot be null
-- category - varchar
 
 #### Users table
 - id - serial primary key
-- userName - varchar unique - Cannot be null
-- firstName - varchar - Cannot be null
-- lastName - varchar - Cannot be null
+- firstname - varchar - Cannot be null
+- lastname - varchar - Cannot be null
 - password - varchar  - Cannot be null
-
-#### Orders table
-- id - serial primary key
-- user_id bigint references users(id)  - Cannot be null
-- complete (boolean) - Cannot be null
-
 
 #### Order_Products table
 - id - serial primary key
@@ -120,8 +112,6 @@ npm run  start
 - product_id - bigint references products(id)  - Cannot be null
 
 #### Orders
-- id
-- id of each product in the order
-- quantity of each product in the order
+- id - serial primary key
 - user_id
 - status of order (active or complete)

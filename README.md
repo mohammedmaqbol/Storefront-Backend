@@ -52,11 +52,11 @@
 
 **Development Database**
 ```
-CREATE DATABASE store_dev;
+CREATE DATABASE storefront_dev;
 ```
 **Test Database**
 ```
-CREATE DATABASE store_test;
+CREATE DATABASE storefront_test;
 ```
 **Install Dependencies**
 ```

@@ -2,7 +2,6 @@ import express from 'express';
 import * as users_handlers from '../handlers/users';
 import * as products_handlers from '../handlers/products';
 import * as orders_handlers from '../handlers/orders';
-
 const router = express.Router();
 
 //ORDER ROUTES

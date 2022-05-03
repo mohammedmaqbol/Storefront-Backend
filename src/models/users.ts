@@ -49,17 +49,19 @@ export class usersModel {
   }
   //AUTHENTICATE
   async authenticate(firstname: string, lastname: string, password: string): Promise<User | null> {
-    const connection = await pool.connect();
-    const query = "SELECT * FROM users WHERE firstname=($1) AND lastname=($2)";
-    const result = await connection.query(query, [firstname, lastname]);
-    if (result.rows.length) {
-      const user = result.rows[0];
-      if (bcrypt.compareSync(password + pepper, user.password)) {
-        return user;
-        console.log(4);
-      }
-    }
+  try {
+        const connection = await pool.connect();
+        const query = "SELECT * FROM users WHERE firstname=($1) AND lastname=($2)";
+        const result = await connection.query(query, [firstname, lastname]);
+        if (result.rows.length) {
+          const user = result.rows[0];
+          if (bcrypt.compareSync(password + pepper, user.password)) {
+            return user;
+          }
+        }
+  } catch (err) {
+    throw err
+  }
     return null;
   }
 }
-//  npx db-migrate reset;npx db-migrate up; npm run test

@@ -6,7 +6,7 @@ import { order } from '../types/orders_types';
 const Order = new orderUser();
 
 // CREATE FUNCTION
-export const Create = async (req: Request, res: Response) => {
+export const Create = async (req: Request, res: Response) : Promise<any> => {
   const { user_id, status } = req.body;
   const order: order = { user_id, status };
   
@@ -27,20 +27,24 @@ export const Create = async (req: Request, res: Response) => {
 };
 
 //SHOW ONE FUNCTION
-export const Show = async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
-  if (!id) {
-    return res.status(404), res.json('The order is not found');
-  }
-  const order = await Order.Show(id);
-  if(!order){
-    return res.status(404), res.json("Order not found");
-  }
-  res.json(order);
+export const Show = async (req: Request, res: Response) : Promise<any>  => {
+ const id = parseInt(req.params.id);
+ try {
+        if (!id) {
+          return res.status(404), res.json('The order is not found');
+        }
+        const order = await Order.Show(id);
+        if(!order){
+          return res.status(404), res.json("Order not found");
+        }
+        res.json(order);
+ } catch (err) {
+   res.json(err)
+ }
 };
 
 // create the add products to order route
-export const addProduct = async (req: Request, res: Response) => {
+export const addProduct = async (req: Request, res: Response) : Promise<any> => {
   const quantity: number = parseInt(req.body.quantity);
   const orderId: string = req.params.id;
   const productId: string = req.body.product_id;
@@ -48,6 +52,7 @@ export const addProduct = async (req: Request, res: Response) => {
 		res.status(400);
 		return res.send("Missing/Invalid parameters, the following parameter are required: orderId, productId, quantity");
 	}
+
   try {
     Authorize(req);
   } catch (err) {
@@ -55,6 +60,7 @@ export const addProduct = async (req: Request, res: Response) => {
     res.json('Access denied, invalid token');
     return;
   }
+
   try {
       const addProduct = await Order.addProduct(quantity, orderId, productId);
       res.json(addProduct);

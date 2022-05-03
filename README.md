@@ -6,11 +6,10 @@
 * [Dev Dependencies](#DevDependencies)
 * [.env file contents](#.env-file-contents)
 * [Dev Dependencies](#Dev-Dependencies)
-* [Database setup](#Database-setup)
+* [DB Creation and Migrations](#DB-Creation-and-Migrations)
 * [Prerequisites](#Prerequisites)
 * [Instructions](#Instructions)
 * [Endpoints](#Endpoints)
-* [Database-Schema](#Database-Schema)
 # Dependencies:
     - express - Node.js web app framework
     - dotenv - Load environment variables
@@ -43,8 +42,7 @@
     SALT_ROUNDS=10
     TOKEN_SECRET=your_scret_token
 
-
-# Database setup
+# DB Creation and Migrations
  - Install postgres`
  - Port used: Default postgres port 5432
  - Production database - storefront_dev
@@ -52,17 +50,23 @@
  - User: postgres
  - Password: admin
 
-# Instructions
-
-### 1. Install Dependencies
+**Development Database**
+```
+CREATE DATABASE storefront_dev;
+```
+**Test Database**
+```
+CREATE DATABASE storefront_test;
+```
+**Install Dependencies**
 ```
 npm install
 ```
-### 2.  DB Creation and Migrations
+**DB Creation and Migrations**
 ``` 
 npm run migration-run
 ```
-### 3. Starting the project
+**Starting the project
     Make sure to have Port 5000 available for Express server and port 5423 for PostgreSQL server 
 ```
 npm run  start
@@ -72,7 +76,42 @@ npm run  start
     npm run test
 ```
 # Endpoints
- - See REQUIREMENTS.md file
+#### Products
+- Index 
+- Show
+- Create [token required]
+- [OPTIONAL] Top 5 most popular products 
+- [OPTIONAL] Products by category (args: product category)
+
+#### Users
+- Index [token required]
+- Show [token required]
+- Create N[token required]
+
+#### Orders
+- Current Order by user (args: user id)[token required]
+- [OPTIONAL] Completed Orders by user (args: user id)[token required]
+
 
 # Database Schema
- - See REQUIREMENTS.md file
+ #### Products table
+- id - serial primary key 
+- name - varchar - Cannot be null
+- price - numeric(17,2) - Cannot be null
+
+#### Users table
+- id - serial primary key
+- firstname - varchar - Cannot be null
+- lastname - varchar - Cannot be null
+- password - varchar  - Cannot be null
+
+#### Order_Products table
+- id - serial primary key
+- quantity - integer  - Cannot be null
+- order_id - bigint references orders(id)  - Cannot be null
+- product_id - bigint references products(id)  - Cannot be null
+
+#### Orders
+- id - serial primary key
+- user_id
+- status of order (active or complete)

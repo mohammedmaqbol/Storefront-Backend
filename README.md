@@ -50,19 +50,19 @@
  - User: postgres
  - Password: admin
 
-**Development Database
+**Development Database**
 ```
 CREATE DATABASE store_dev;
 ```
-**Test Database
+**Test Database**
 ```
 CREATE DATABASE store_test;
 ```
-**Install Dependencies
+**Install Dependencies**
 ```
 npm install
 ```
-**DB Creation and Migrations
+**DB Creation and Migrations**
 ``` 
 npm run migration-run
 ```
